@@ -11,16 +11,15 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ittx.mybatis.demo1.dao.UserDao;
 import com.ittx.mybatis.demo1.model.User;
 
-public class UserTest {
-	private static final Logger log = Logger.getLogger(UserTest.class);
+public class UserOneTest {
+	private static final Logger log = Logger.getLogger(UserOneTest.class);
 	private SqlSessionFactory sqlSessionFactory;
 
 	@Before
 	public void before() throws IOException {
-		Reader reader = Resources.getResourceAsReader("Configuration.xml");
+		Reader reader = Resources.getResourceAsReader("ConfigurationOne.xml");
 		sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 	}
 
@@ -29,10 +28,7 @@ public class UserTest {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = sqlSessionFactory.openSession();
-//			User user = sqlSession.selectOne("UserMapper.selectUserByID", 1);
-			UserDao  userDao = sqlSession.getMapper(UserDao.class);
-			User user = userDao.selectUserByID(1);
-			
+			User user = sqlSession.selectOne("UserMapper.selectUserByID", 1);
 			log.info(user);
 		} finally {
 			if (sqlSession != null) {
@@ -45,11 +41,9 @@ public class UserTest {
 	public void testInsertUser() {
 		SqlSession sqlSession = null;
 		try {
-			User user = new User("小明2",33);
+			User user = new User("小明",33);
 			sqlSession = sqlSessionFactory.openSession();
-//			sqlSession.insert("UserMapper.insertUser", user);
-			UserDao  userDao = sqlSession.getMapper(UserDao.class);
-			userDao.insertUser(user);
+			sqlSession.insert("UserMapper.insertUser", user);
 			sqlSession.commit();
 		} finally {
 			if (sqlSession != null) {
@@ -63,9 +57,7 @@ public class UserTest {
 		SqlSession sqlSession = null;
 		try {
 			sqlSession = sqlSessionFactory.openSession();
-//			sqlSession.delete("UserMapper.deleteUserById", 7);
-			UserDao  userDao = sqlSession.getMapper(UserDao.class);
-			userDao.deleteUserById(7);
+			sqlSession.delete("UserMapper.deleteUserById", 7);
 			sqlSession.commit();
 		} finally {
 			if (sqlSession != null) {
@@ -79,9 +71,7 @@ public class UserTest {
 		try {
 			User user = new User(1,"麻子",18);
 			sqlSession = sqlSessionFactory.openSession();
-//			sqlSession.update("UserMapper.updateUser", user);
-			UserDao  userDao = sqlSession.getMapper(UserDao.class);
-			userDao.updateUser(user);
+			sqlSession.update("UserMapper.updateUser", user);
 			sqlSession.commit();
 		} finally {
 			if (sqlSession != null) {
